@@ -1,0 +1,81 @@
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "channelinfo": {
+            "channel": "posmobile"
+        },
+        "apiresult": {
+            "issuccess": true,
+            "returncode": "0",
+            "message": ""
+        },
+        "payload": {
+            "store_info": [{
+                    "store_id": "00882",
+                    "store_name": "7-Eleven ร่มเกล้า 2",
+                    "pos_no": 1,
+                    "business_date": "2020-12-11",
+                    "shift_no": 1,
+                    "posTaxId": "E02021000203942"
+                },
+                {
+                    "store_id": "03791",
+                    "store_name": "7-Eleven ร้านทดสอบ Dev",
+                    "pos_no": 1,
+                    "business_date": "2020-07-31",
+                    "shift_no": 1,
+                    "posTaxId": "04"
+                },
+                {
+                    "store_id": "05490",
+                    "store_name": "7-Eleven ร้านทดสอบ สาขา สีลม 3 (ธ.กรุงเทพสำนักงานใหญ่)",
+                    "pos_no": 1,
+                    "business_date": "2020-12-14",
+                    "shift_no": 1,
+                    "posTaxId": "04"
+                },
+                {
+                    "store_id": "05880",
+                    "store_name": "7-Eleven AIA",
+                    "pos_no": 1,
+                    "business_date": "2020-12-13",
+                    "shift_no": 1,
+                    "posTaxId": "B030220002A0119"
+                },
+                {
+                    "store_id": "11000",
+                    "store_name": "7-Eleven ติวานนท์ 4 แยก 1",
+                    "pos_no": 1,
+                    "business_date": "2020-12-13",
+                    "shift_no": 2,
+                    "posTaxId": "04"
+                },
+                {
+                    "store_id": "11104",
+                    "store_name": "7-Eleven ทดสอบ",
+                    "pos_no": 1,
+                    "business_date": "2020-11-03",
+                    "shift_no": 1,
+                    "posTaxId": "E041310002A0855"
+                },
+                {
+                    "store_id": "11892",
+                    "store_name": "7-Eleven สีลม คอนแวนต์",
+                    "pos_no": 1,
+                    "business_date": "2020-12-30",
+                    "shift_no": 1,
+                    "posTaxId": "B030220002A0119"
+                },
+                {
+                    "store_id": "99999",
+                    "store_name": "7-Eleven สีลม คอนแวนต์",
+                    "pos_no": 1,
+                    "business_date": "2020-12-05",
+                    "shift_no": 3,
+                    "posTaxId": "B030220002A0119"
+                }
+            ]
+        }
+    },
+    "id": 0
+}

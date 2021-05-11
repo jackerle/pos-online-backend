@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  font-family: 'A7Font';
+  font-size: medium;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@font-face {
+  font-family: 'A7Font';
+  src: local('A7Font'), url(./static/font/DBHelvethaicaMonX.woff2) format('woff');
+}
