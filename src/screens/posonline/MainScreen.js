@@ -245,12 +245,8 @@ export default function MainUIRender(props) {
         //End Mock
       } catch (error) {
         reject('Error from getStoreInfo')
-      } finally {
-
-      }
-
-
-
+      } 
+      
     })
   }
 

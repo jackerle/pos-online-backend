@@ -7,7 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import MessageDialog from '../Dialog/MessageDialog';
-
+import InputAdornment from '@material-ui/core/InputAdornment';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +52,6 @@ export default function LoginDialog(props){
                 <form className={"form-login"} onSubmit={login}>
                     <DialogTitle className={classes.styledHeader} align={"center"} id="login-form-dialog-title">Login</DialogTitle>
                     <DialogContent> 
-
                         <TextField
                             autoFocus
                             margin="dense"
@@ -61,6 +61,13 @@ export default function LoginDialog(props){
                             value={username}
                             onChange={handleUsername}
                             fullWidth
+                            // InputProps={{
+                            //     startAdornment: (
+                            //         <InputAdornment position="start">
+                            //             <PermIdentityIcon/>
+                            //         </InputAdornment>
+                            //     )
+                            // }}
                             required
                         />
                         <TextField
