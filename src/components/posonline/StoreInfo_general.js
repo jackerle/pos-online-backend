@@ -1,15 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
-import { useHistory , Redirect } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 //Marterial UI Section
 import { makeStyles } from '@material-ui/core/styles';
-import { 
-  Drawer , Grid  , List , ListItem , ListItemIcon , ListItemText , Divider, Paper ,
-  Card , Typography , Button , Box , ListItemAvatar , Avatar , IconButton , Badge ,
-  ListItemSecondaryAction , ButtonGroup , Container , Dialog , DialogTitle , DialogContent , DialogContentText ,
-  TextField , DialogActions , CardActionArea , CardMedia , CardContent , AppBar , Toolbar , Chip ,
+import {
+  Drawer, Grid, List, ListItem, ListItemIcon, ListItemText, Divider, Paper,
+  Card, Typography, Button, Box, ListItemAvatar, Avatar, IconButton, Badge,
+  ListItemSecondaryAction, ButtonGroup, Container, Dialog, DialogTitle, DialogContent, DialogContentText,
+  TextField, DialogActions, CardActionArea, CardMedia, CardContent, AppBar, Toolbar, Chip,InputBase
 } from '@material-ui/core'
 
 //private
@@ -35,27 +35,27 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 
 //css
 const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(0),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    store:{
-        font: "7Font"
-    },
-    listItemText:{
-      fontSize:'1.4em',//Insert your required size
-      color:'#438B63'
-    },
-    listItemDetail:{
-      fontSize:'1.2em',//Insert your required size
-      fontWeight:'regular',
-      color:'#438B63'
-    }
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(0),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  store: {
+    font: "7Font"
+  },
+  listItemText: {
+    fontSize: '1.4em',//Insert your required size
+    color: '#438B63'
+  },
+  listItemDetail: {
+    fontSize: '1.2em',//Insert your required size
+    fontWeight: 'regular',
+    color: '#438B63'
+  }
 }));
 
 //Styled Component Section
@@ -91,7 +91,7 @@ export default function MainUIRender(props) {
       <PaperStyled elevation={0}>
         <List>
           <ListItem>
-            <ListItemText primary={props.store_info===undefined?"กรุณากรอกรหัสสาขา":props.store_info.store_id+" "+props.store_info.store_name} classes={{primary:classes.listItemText}}/>
+            <ListItemText primary={props.store_info === undefined ? "กรุณากรอกรหัสสาขา" : props.store_info.store_id + " " + props.store_info.store_name} classes={{ primary: classes.listItemText }} />
             <ListItemSecondaryAction>
               <ListItem>
                 {/* <IconButton edge="end" color='primary' className={classes.menuButton}>
@@ -104,14 +104,14 @@ export default function MainUIRender(props) {
             </ListItemSecondaryAction>
           </ListItem>
         </List>
-        <Divider/>
+        <Divider />
         <Grid container>
           <Grid item xs={3}>
             <List>
               <ListItem>
                 <ListItemText primary="รหัสสาขา" />
                 <ListItemSecondaryAction>
-                  <ListItemText primary={props.store_info===undefined?"":props.store_info.store_id} classes={{primary:classes.listItemDetail}}/>
+                  <ListItemText primary={props.store_info === undefined ? "" : props.store_info.store_id} classes={{ primary: classes.listItemDetail }} />
                 </ListItemSecondaryAction>
               </ListItem>
             </List>
@@ -121,7 +121,7 @@ export default function MainUIRender(props) {
               <ListItem>
                 <ListItemText primary="วันที่ปฏิบัติงาน" />
                 <ListItemSecondaryAction>
-                  <ListItemText primary={props.store_info===undefined?"":props.store_info.business_date} classes={{primary:classes.listItemDetail}}/>
+                  <ListItemText primary={props.store_info === undefined ? "" : props.store_info.business_date} classes={{ primary: classes.listItemDetail }} />
                 </ListItemSecondaryAction>
               </ListItem>
             </List>
@@ -131,7 +131,7 @@ export default function MainUIRender(props) {
               <ListItem>
                 <ListItemText primary="ผลัด" />
                 <ListItemSecondaryAction>
-                  <ListItemText primary={props.store_info===undefined?"":props.store_info.shift_no} classes={{primary:classes.listItemDetail}}/>
+                  <ListItemText primary={props.store_info === undefined ? "" : props.store_info.shift_no} classes={{ primary: classes.listItemDetail }} />
                 </ListItemSecondaryAction>
               </ListItem>
             </List>
@@ -141,7 +141,7 @@ export default function MainUIRender(props) {
               <ListItem>
                 <ListItemText primary="เครื่อง" />
                 <ListItemSecondaryAction>
-                  <ListItemText primary={props.store_info===undefined?"":props.store_info.pos_no} classes={{primary:classes.listItemDetail}}/>
+                  <ListItemText primary={props.store_info === undefined ? "" : props.store_info.pos_no} classes={{ primary: classes.listItemDetail }} />
                 </ListItemSecondaryAction>
               </ListItem>
             </List>

@@ -58,8 +58,10 @@ const StoreListStyled = styled(List)`
   margin-top:1rem;
   background:White;
   margin-left:1rem;
+  margin-right:3rem;
   // max-height:53rem;
-  // max-height:44rem;
+  // height:35rem;
+  padding:0
 `;
 const ItemGridStyled = styled(Grid)`
   overflow:auto;
@@ -173,9 +175,9 @@ export default function MainUIRender(props) {
                 <IconButton edge="end" color='primary' onClick={() => { handleSearch(searchText) }} className={classes.menuButton}>
                   <SearchIcon />
                 </IconButton>
-                <IconButton edge="end" color='primary' onClick={handleRefresh} className={classes.menuButton}>
+                {/* <IconButton edge="end" color='primary' onClick={handleRefresh} className={classes.menuButton}>
                   <RefreshIcon />
-                </IconButton>
+                </IconButton> */}
               </ListItem>
             </ListItemSecondaryAction>
           </ListItem>

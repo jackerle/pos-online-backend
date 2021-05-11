@@ -41,10 +41,11 @@ const useStyles = makeStyles((theme) => ({
 //Styled Component Section
 
 const GridStoreListStyled = styled(Grid)`
-overflow:auto;
+// overflow:auto;
 // height:55rem;
 // height:46rem;
 width: 100%;
+margin-right:3rem;
 background:WhiteSmoke;
 `;
 
@@ -109,7 +110,7 @@ export default function MainUIRender(props) {
       // console.log(apiRequest)
       const apiResponse = await get_transaction_by_store_api(apiRequest);
 
-
+      console.log(apiResponse)
       if (apiResponse.data != undefined) {
         if (apiResponse.data.result.apiresult.issuccess == false) {
           alert("[" + apiResponse.data.result.apiresult.returncode + "] " +
@@ -220,7 +221,7 @@ export default function MainUIRender(props) {
         };
 
         const storeInfo = await get_store_info_api(getStoreInfo)
-        console.log(storeInfo)
+        // console.log(storeInfo)
         // console.log(apiResponse)
         //set StoreInfo
         if (storeInfo.data != undefined) {
@@ -246,7 +247,7 @@ export default function MainUIRender(props) {
       } catch (error) {
         reject('Error from getStoreInfo')
       } 
-      
+
     })
   }
 
@@ -293,7 +294,8 @@ export default function MainUIRender(props) {
       >
       </APPBar>
       <GridStoreListStyled container>
-        <Grid item xs={5}>
+        <Grid xs={8}></Grid>
+        <Grid item xs={4}>
           <StoreList
             menuIndex={menuIndex}
             onClickMenu={handleClickStore}

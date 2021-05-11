@@ -1,16 +1,16 @@
-import React , {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
-import { useHistory , Redirect } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 //Marterial UI Section
-import { makeStyles , withStyles , useTheme } from '@material-ui/core/styles';
-import { 
-  Drawer , Grid  , List , ListItem , ListItemIcon , ListItemText , Divider, Paper ,
-  Card , Typography , Button , Box , ListItemAvatar , Avatar , IconButton , Badge ,
-  ListItemSecondaryAction , ButtonGroup , Container , Dialog , DialogTitle , DialogContent , DialogContentText ,
-  TextField , DialogActions , CardActionArea , CardMedia , CardContent , AppBar , Toolbar , Chip , 
-  TableContainer , TableHead , TableRow , TableCell , Table , TableBody , InputBase , TablePagination
+import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
+import {
+  Drawer, Grid, List, ListItem, ListItemIcon, ListItemText, Divider, Paper,
+  Card, Typography, Button, Box, ListItemAvatar, Avatar, IconButton, Badge,
+  ListItemSecondaryAction, ButtonGroup, Container, Dialog, DialogTitle, DialogContent, DialogContentText,
+  TextField, DialogActions, CardActionArea, CardMedia, CardContent, AppBar, Toolbar, Chip,
+  TableContainer, TableHead, TableRow, TableCell, Table, TableBody, InputBase, TablePagination
 } from '@material-ui/core'
 import PropTypes from 'prop-types';
 
@@ -36,7 +36,7 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import ReplayIcon from '@material-ui/icons/Replay';
 import SearchIcon from '@material-ui/icons/Search';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import { numberWithCommas , dateWithoutTime , timeWithoutDate } from '../../utility/formathelper';
+import { numberWithCommas, dateWithoutTime, timeWithoutDate } from '../../utility/formathelper';
 import Loading from '../../components/posonline/Loading'
 import axios from 'axios';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -44,32 +44,34 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Receipt from '../../components/posonline/Receipt'
-import {get_receipt_by_receiptno_api , get_transaction_by_store_api} from '../../utility/apihelper'
+import { get_receipt_by_receiptno_api, get_transaction_by_store_api } from '../../utility/apihelper'
 import Checkbox from '@material-ui/core/Checkbox';
+import MessageDialog from '../Dialog/MessageDialog';
+import CloudQueueIcon from '@material-ui/icons/CloudQueue';
 
 //css
 const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(0),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    store:{
-        font: "7Font"
-    },
-    listItemText:{
-      fontSize:'1.4em',//Insert your required size
-      color:'#438B63'
-    },
-    listItemDetail:{
-      fontSize:'1.2em',//Insert your required size
-      fontWeight:'regular',
-      color:'#438B63'
-    }
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(0),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  store: {
+    font: "7Font"
+  },
+  listItemText: {
+    fontSize: '1.4em',//Insert your required size
+    color: '#438B63'
+  },
+  listItemDetail: {
+    fontSize: '1.2em',//Insert your required size
+    fontWeight: 'regular',
+    color: '#438B63'
+  }
 }));
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -197,133 +199,130 @@ export default function MainUIRender(props) {
   const [isReceiptOpen, setReceiptOpen] = React.useState(false);
   const [receiptLine, setReceiptLine] = React.useState([]);
   const [receiptNo, setReceiptNo] = React.useState(0);
-  const handleReceiptOpen = () =>
-  {
+  const [showReciepError, setShowReciepError] = React.useState({
+    isShow: false
+  });
+
+  const handleReceiptOpen = () => {
     setReceiptOpen(true);
   }
-  const handleReceiptClose = () =>
-  {
+  const handleReceiptClose = () => {
     setReceiptOpen(false);
   }
 
   const [searchText, setSearchText] = React.useState("");
-  
 
-  async function handleChangePage(event, pageNumber){
+
+  async function handleChangePage(event, pageNumber) {
     //
 
-    try{
+    try {
       setLoadingOpen(true);
 
-      let apiRequest={
+      let apiRequest = {
         "channel": "posmobile",
         "store_id": props.store_info.store_id,
         "offset": (pageNumber * itemPerPage) + 1
       };
 
       const apiResponse = await get_transaction_by_store_api(apiRequest);
-
-      if(apiResponse.data!=undefined)
-      {
-        if(apiResponse.data.result.apiresult.issuccess==false)
-        {
-          alert("["+apiResponse.data.result.apiresult.returncode+"] "+
-                  apiResponse.data.result.apiresult.message);
-        }else
-        {
+      console.log(apiResponse)
+      if (apiResponse.data != undefined) {
+        if (apiResponse.data.result.apiresult.issuccess == false) {
+          alert("[" + apiResponse.data.result.apiresult.returncode + "] " +
+            apiResponse.data.result.apiresult.message);
+        } else {
           let trn_list = apiResponse.data.result.payload.transactions;
           let trn_count = apiResponse.data.result.payload.totalrecords;
-          
+
           setMaxTransactionCount(trn_count)
           setTransactionList(trn_list);
           setPageIndex(pageNumber);
         }
       }
-    }catch(Exception)
-    {
-      alert(Exception);
-    }finally{
+    } catch (Exception) {
+      // alert(Exception);
+      console.log(Exception)
+    } finally {
       setLoadingOpen(false);
     }
   }
 
-  async function handleReceiptClick(receipt_no,receipt_id){
-    try{
+  async function handleReceiptClick(receipt_no, receipt_id) {
+    try {
       setLoadingOpen(true);
 
-      let apiRequest={
+      let apiRequest = {
         "channel": "posmobile",
         "receipt_id": receipt_id
       };
 
       const apiResponse = await get_receipt_by_receiptno_api(apiRequest);
-
-      if(apiResponse.data!=undefined)
-      {
-        if(apiResponse.data.result.apiresult.issuccess==false)
-        {
-          alert("["+apiResponse.data.result.apiresult.returncode+"] "+
-                  apiResponse.data.result.apiresult.message);
-        }else
-        {
+      console.log(apiResponse)
+      if (apiResponse.data != undefined) {
+        if (apiResponse.data.result.apiresult.issuccess == false) {
+          setShowReciepError({
+            isShow: true,
+            message: "[" + apiResponse.data.result.apiresult.returncode + "] " +
+              apiResponse.data.result.apiresult.message
+          })
+          console.log("[" + apiResponse.data.result.apiresult.returncode + "] " +
+            apiResponse.data.result.apiresult.message);
+        } else {
           setReceiptNo(receipt_no);
           setReceiptLine(apiResponse.data.result.payload.slip.receiptLines);
           handleReceiptOpen();
         }
       }
-    }catch(Exception)
-    {
-      alert(Exception);
-    }finally{
+    } catch (Exception) {
+      setShowReciepError(true)
+      // alert(Exception);
+    } finally {
       setLoadingOpen(false);
     }
   }
 
-  async function handleSearch(s_text){
+  async function handleSearch(s_text) {
     // if(searchText=="")
     //   return;
 
-    try{
+    try {
       setLoadingOpen(true);
 
-      let apiRequest={
+      let apiRequest = {
         "channel": "posmobile",
         "store_id": props.store_info.store_id,
         "offset": 0,
-        "search_text":s_text
+        "search_text": s_text
       };
 
       const apiResponse = await get_transaction_by_store_api(apiRequest);
 
-      if(apiResponse.data!=undefined)
-      {
-        if(apiResponse.data.result.apiresult.issuccess==false)
-        {
-          alert("["+apiResponse.data.result.apiresult.returncode+"] "+
-                  apiResponse.data.result.apiresult.message);
-        }else
-        {
+      if (apiResponse.data != undefined) {
+        if (apiResponse.data.result.apiresult.issuccess == false) {
+          alert("[" + apiResponse.data.result.apiresult.returncode + "] " +
+            apiResponse.data.result.apiresult.message);
+        } else {
           let trn_list = apiResponse.data.result.payload.transactions;
           let trn_count = apiResponse.data.result.payload.totalrecords;
-          
+
           setMaxTransactionCount(trn_count)
           setTransactionList(trn_list);
           setPageIndex(0);
         }
       }
-    }catch(Exception)
-    {
+    } catch (Exception) {
       alert(Exception);
-    }finally{
+    } finally {
       setLoadingOpen(false);
     }
   }
-  function handleSearchKeyDown(e){
-    if(e.key == 'Enter'){
+  function handleSearchKeyDown(e) {
+    if (e.key == 'Enter') {
       handleSearch(searchText);
     }
   }
-  function handleRefresh(){
+  function handleRefresh() {
     handleSearch("");
     setSearchText("");
   }
@@ -349,187 +348,201 @@ export default function MainUIRender(props) {
       <PaperStyled elevation={0}>
         <List>
           <ListItem>
-            <ListItemText primary={props.store_info===undefined?'':props.store_info.store_id+" "+props.store_info.store_name} classes={{primary:classes.listItemText}}/>
+            <ListItemText primary={props.store_info === undefined ? '' : props.store_info.store_id + " " + props.store_info.store_name} classes={{ primary: classes.listItemText }} />
             <ListItemSecondaryAction>
               <ListItem>
-                <InputBase 
-                  placeholder="เลขที่ใบเสร็จ" 
-                  value = {searchText}
+                <InputBase
+                  placeholder="เลขที่ใบเสร็จ"
+                  value={searchText}
                   onChange={e => setSearchText(e.target.value)}
-                  onKeyPress={handleSearchKeyDown} 
+                  onKeyPress={handleSearchKeyDown}
                 />
-                <IconButton edge="end" color='primary' onClick={() => {handleSearch(searchText)}} className={classes.menuButton}>
+                <IconButton edge="end" color='primary' onClick={() => { handleSearch(searchText) }} className={classes.menuButton}>
                   <SearchIcon />
                 </IconButton>
-                <IconButton edge="end" color='primary' onClick={handleRefresh}  className={classes.menuButton}>
-                  <RefreshIcon />
+                <IconButton edge="end" color='primary'  className={classes.menuButton}>
+                  <CloudQueueIcon />
                 </IconButton>
               </ListItem>
             </ListItemSecondaryAction>
           </ListItem>
         </List>
-        <Divider/>
+        <Divider />
         <TableContainerStyled className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  />
+                  align={'center'}
+                  padding='none'
+                />
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   วัน-เดือน-ปี
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   เวลา
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   แชนแนล
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
+                  RefID
+                </StyledTableCell>
+                <StyledTableCell
+                  align={'center'}
+                  padding='none'
+                >
                   เลขที่ใบเสร็จ
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   ชนิด
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   ใบเสร็จอ้างอิง
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   ยอดรวม
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   ส่วนลด
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
+                  align={'center'}
+                  padding='none'
+                >
                   ยอดสุทธิ
                 </StyledTableCell>
                 <StyledTableCell
-                    align={'center'}
-                    padding='none'
-                  >
-                    Operation
+                  align={'center'}
+                  padding='none'
+                >
+                  Operation
                 </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {
-                transactionList.map(transaction=>{
+                transactionList.map(transaction => {
                   return <StyledTableRow>
-                        <TableCell
-                            align={'center'}
-                            padding='none'
-                          >
-                            <Checkbox
-                              // checked={true}
-                              // onChange={handleChange}
-                              color="primary"
-                            />
-                        </TableCell>
-                        <TableCell
-                            align={'center'}
-                            padding='none'
-                          >
-                          {dateWithoutTime(transaction.system_date)}
-                        </TableCell>
-                        <TableCell
-                            align={'center'}
-                            padding='none'
-                          >
-                          {timeWithoutDate(transaction.system_date)}
-                        </TableCell>
-                        <TableCell
-                            align={'center'}
-                            padding='none'
-                          >
-                          {transaction.channel}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'center'}
-                            padding='none'
-                          >
-                          {transaction.receipt_no}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'center'}
-                            padding='none'
-                          >
-                          {transaction.trans_type}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'center'}
-                            padding='none'
-                          >
-                          {transaction.ref_receipt_no}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'right'}
-                            padding='none'
-                          >
-                          {numberWithCommas(transaction.sub_total_amt)}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'right'}
-                            padding='none'
-                          >
-                          {numberWithCommas(transaction.discount_amt)}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'right'}
-                            padding='none'
-                          >
-                          {numberWithCommas(transaction.total_amt)}
-                        </TableCell>
-                        <TableCell
-                            key={1}
-                            align={'center'}
-                            padding='none'
-                          >
-                          <IconButton color='primary' onClick={()=>{
-                            // console.log(transaction)
-                            handleReceiptClick(transaction.receipt_no,transaction.receipt_id)}}>
-                            <ReceiptIcon />
-                          </IconButton>
-                          <IconButton color='primary'>
-                            <RedoIcon />
-                          </IconButton>
-                        </TableCell>
-                      </StyledTableRow>
+                    <TableCell
+                      align={'center'}
+                      padding='none'
+                    >
+                      <Checkbox
+                        // checked={true}
+                        // onChange={handleChange}
+                        color="primary"
+                      />
+                    </TableCell>
+                    <TableCell
+                      align={'center'}
+                      padding='none'
+                    >
+                      {dateWithoutTime(transaction.system_date)}
+                    </TableCell>
+                    <TableCell
+                      align={'center'}
+                      padding='none'
+                    >
+                      {timeWithoutDate(transaction.system_date)}
+                    </TableCell>
+                    <TableCell
+                      align={'center'}
+                      padding='none'
+                    >
+                      {transaction.channel}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'center'}
+                      padding='none'
+                    >
+                      {transaction.reference_id}
+                      </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'center'}
+                      padding='none'
+                    >
+                      {transaction.receipt_no}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'center'}
+                      padding='none'
+                    >
+                      {transaction.trans_type}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'center'}
+                      padding='none'
+                    >
+                      {transaction.ref_receipt_no}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'right'}
+                      padding='none'
+                    >
+                      {numberWithCommas(transaction.sub_total_amt)}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'right'}
+                      padding='none'
+                    >
+                      {numberWithCommas(transaction.discount_amt)}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'right'}
+                      padding='none'
+                    >
+                      {numberWithCommas(transaction.total_amt)}
+                    </TableCell>
+                    <TableCell
+                      key={1}
+                      align={'center'}
+                      padding='none'
+                    >
+                      <IconButton color='primary' onClick={() => {
+                        console.log(transaction)
+                        handleReceiptClick(transaction.receipt_no, transaction.receipt_id)
+                      }}>
+                        <ReceiptIcon />
+                      </IconButton>
+                      {/* <IconButton color='primary'>
+                        <RedoIcon />
+                      </IconButton> */}
+                    </TableCell>
+                  </StyledTableRow>
                 })
-              }           
+              }
             </TableBody>
           </Table>
         </TableContainerStyled>
@@ -544,15 +557,16 @@ export default function MainUIRender(props) {
         />
       </PaperStyled>
 
-      <Loading 
+      <Loading
         isOpen={isLoadingOpen}
       />
-      <Receipt 
-        isOpen = {isReceiptOpen}
-        onClose = {handleReceiptClose}
-        receipt_line = {receiptLine}
-        receipt_no = {receiptNo}
+      <Receipt
+        isOpen={isReceiptOpen}
+        onClose={handleReceiptClose}
+        receipt_line={receiptLine}
+        receipt_no={receiptNo}
       />
+      <MessageDialog showProp={showReciepError.isShow} setShowProp={(bool) => setShowReciepError(bool)} title={"เกิดข้อผิดพลาด"} message={"ไม่สามารถเรียกข้อมูลใบเสร็จได้ : " + showReciepError.message} />
     </div>
   );
 }
