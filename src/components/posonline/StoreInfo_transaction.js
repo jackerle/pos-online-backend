@@ -398,7 +398,7 @@ export default function MainUIRender(props) {
                   align={'center'}
                   padding='none'
                 >
-                  RefID
+                  ReferenceID
                 </StyledTableCell>
                 <StyledTableCell
                   align={'center'}
