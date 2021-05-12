@@ -334,7 +334,7 @@ export default function MainUIRender(props) {
     setTransactionList(props.transaction_list);
     setPageIndex(0);
     setSearchText("");
-  }, []);
+  }, [props.transaction_list]);
 
   // console.log(transactionList)
 

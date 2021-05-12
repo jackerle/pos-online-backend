@@ -297,8 +297,9 @@ export default function MainUIRender(props) {
         // setStoreList(JSON.parse(JSON.stringify(storeListBk)));
       }
       await getStoreInfo(search_text)
+      
     } catch (Exception) {
-      // console.log(Exception)
+      console.log(Exception)
       alert("here", Exception);
     } finally {
       // setLoadingOpen(false);
