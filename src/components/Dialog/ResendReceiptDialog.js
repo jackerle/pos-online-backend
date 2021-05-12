@@ -20,7 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { resend_by_receiptno_api } from "../../utility/apihelper";
 import DoneIcon from '@material-ui/icons/Done';
-import ClearAll from '@material-ui/icons/ClearAll';
+import ClearAll from '@material-ui/icons/DeleteOutline';
 
 
 function PaperComponent(props) {
