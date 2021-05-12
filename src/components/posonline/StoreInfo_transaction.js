@@ -334,7 +334,7 @@ export default function MainUIRender(props) {
     setTransactionList(props.transaction_list);
     setPageIndex(0);
     setSearchText("");
-  }, [props]);
+  }, []);
 
   // console.log(transactionList)
 
@@ -447,7 +447,7 @@ export default function MainUIRender(props) {
                   Operation
                 </StyledTableCell>
               </TableRow>
-            </TableHead>
+            </TableHead>  
             <TableBody>
               {
                 transactionList.map((transaction,index) => {
