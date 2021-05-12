@@ -19,6 +19,9 @@ import Draggable from 'react-draggable';
 import CloseIcon from '@material-ui/icons/Close';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { resend_by_receiptno_api } from "../../utility/apihelper";
+import DoneIcon from '@material-ui/icons/Done';
+import ClearAll from '@material-ui/icons/ClearAll';
+
 
 function PaperComponent(props) {
     return (
@@ -75,8 +78,8 @@ const useStyles = makeStyles((theme) => ({
     },
     closeButton: {
         position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
+        right: theme.spacing(0),
+        top: theme.spacing(0),
         color: theme.palette.grey[500],
     },
     tbody: {
@@ -148,200 +151,224 @@ export default function ResendReceiptDialog({
 }) {
 
     const classes = useStyles();
-    const [isLoadingOpen , setLoadingOpen] = React.useState(false)
+    const [isLoadingOpen, setLoadingOpen] = React.useState(false)
 
-    function handleDelItem(itemDel){
-        let f = itemList.filter((item)=>{
-          return item.store_id !== itemDel.store_id
-                    || item.receipt_no !== itemDel.receipt_no});
-    
+    function handleDelItem(itemDel) {
+        let f = itemList.filter((item) => {
+            return item.store_id !== itemDel.store_id
+                || item.receipt_no !== itemDel.receipt_no
+        });
+
         let x = JSON.parse(JSON.stringify(f))
-    
+
         setItemList(x);
-      }
+    }
 
 
-      async function handleResendMessage(){
-        try{
-          setLoadingOpen(true);
-    
-          if(itemList.length === 0){
-            alert("กรุณาเพิ่มข้อมูลใบเสร็จ ในรายการใบเสร็จ");
-            return;
-          }
-    
-          let x = JSON.parse(JSON.stringify(itemList))
-    
-          for(let i=0;i<x.length;i++){
-              if (x[i].status!='ส่งข้อมูลสำเร็จ')
-                x[i].status = "รอดำเนินการ";
-          }
-          setItemList(x);
-    
-          for(let i=0;i<x.length;i++){
-            
-            //1. Prepare request
-            let apiRequest={
-              "channel": x[i].channel,
-              "store_id": x[i].store_id,
-              "receipt_no": x[i].receipt_no
-            };
-    
-            //2. Call API
-            const apiResponse = await resend_by_receiptno_api(apiRequest);
-    
-            //3. Update Result
-            if(apiResponse.data.result === undefined)
-            {
-              x[i].status = apiResponse.data.body.error.message;
-            }else{
-              if(apiResponse.data.result.apiresult.issuccess==false)
-              {
-                x[i].status = apiResponse.data.result.apiresult.message;
-              }else
-              {
-                x[i].status = "ส่งข้อมูลสำเร็จ";
-              }
+    async function handleResendMessage() {
+        try {
+            setLoadingOpen(true);
+
+            if (itemList.length === 0) {
+                alert("กรุณาเพิ่มข้อมูลใบเสร็จ ในรายการใบเสร็จ");
+                return;
             }
-          }
-          setItemList(x);
-        }catch(Exception)
-        {
-          alert(Exception);
-        }finally{
-          setLoadingOpen(false);
+
+            let x = JSON.parse(JSON.stringify(itemList))
+
+            for (let i = 0; i < x.length; i++) {
+                // if (x[i].status != 'ส่งข้อมูลสำเร็จ')
+                    x[i].status = "รอดำเนินการ";
+            }
+            setItemList(x);
+
+            for (let i = 0; i < x.length; i++) {
+
+                //1. Prepare request
+                let apiRequest = {
+                    "channel": x[i].channel,
+                    "store_id": x[i].store_id,
+                    "receipt_no": x[i].receipt_no
+                };
+
+                //2. Call API
+                const apiResponse = await resend_by_receiptno_api(apiRequest);
+
+                //3. Update Result
+                if (apiResponse.data.result === undefined) {
+                    x[i].status = apiResponse.data.body.error.message;
+                } else {
+                    if (apiResponse.data.result.apiresult.issuccess == false) {
+                        x[i].status = apiResponse.data.result.apiresult.message;
+                    } else {
+                        x[i].status = "ส่งข้อมูลสำเร็จ";
+                    }
+                }
+            }
+            setItemList(x);
+        } catch (Exception) {
+            alert(Exception);
+        } finally {
+            setLoadingOpen(false);
         }
-      }
+    }
 
 
     return (
         <>
-        <Dialog
-            open={showProp}
-            onClose={() => setShowProp(false)}
-            aria-labelledby="dialog-title"
-            fullWidth
-            PaperComponent={PaperComponent}
-            aria-labelledby="draggable-dialog-title"
-            maxWidth="md"
-        // classes={{ paper: classes.resendDiaog }}
-        >
-            <DialogTitle
-                style={{ cursor: 'move' , paddingBottom:"0px" }}
-                id="draggable-dialog-title"
-                // className={classes.styledHeader}
-                align={"right"}>
-                <HeaderListStyled>
-                    <Button onClick={handleResendMessage} color="primary" type="submit">
-                        <AutorenewIcon />
-                        Re-Send
-                    </Button>
-                    <Button onClick={() => setShowProp(false)} color="primary" type="submit">
-                        <CloseIcon />
-                        Cancel
-                    </Button>
-                    {/* <ListItemText primary="โปรแกรมส่งข้อมูลยอดขายลงร้านสาขา" /> */}
-                </HeaderListStyled>
-                {/* <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowProp(false)}>
+            <Dialog
+                open={showProp}
+                onClose={() => setShowProp(false)}
+                aria-labelledby="dialog-title"
+                fullWidth
+                PaperComponent={PaperComponent}
+                aria-labelledby="draggable-dialog-title"
+                maxWidth="md"
+            // classes={{ paper: classes.resendDiaog }}
+            >
+                <DialogTitle
+                    style={{ cursor: 'move'}}
+                    id="draggable-dialog-title"
+                    className={classes.styledHeader}
+                    align={"center"}>
+                    Re-send receipt
+                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowProp(false)}>
                     <CloseIcon />
-                </IconButton> */}
-            </DialogTitle>
-            <DialogContent style={{ marginBottom: '3rem' , overflow:"hidden"}} className={classes.tableBody}>
+                </IconButton>
+                </DialogTitle>
+                <DialogContent style={{ marginBottom: '3rem', overflow: "hidden" }} className={classes.tableBody}>
+                    <HeaderListStyled
+                    align={"right"}>
 
-                <PaperStyled elevation={0} >
-                    <TableContainerStyled className={classes.container} >
-                        <Table
-                            // style={{ width: "100%" }}
-                            stickyHeader 
-                            aria-label="sticky table"
-                            fullWidth
-                            maxWidth="lg"
-                        >
-                            <TableHead className={classes.thead}>
-                                <TableRow>
-                                    <StyledTableCell
-                                        align={'center'}
-                                        padding='none'
-                                    >
-                                        แชนแนล
-                                    </StyledTableCell>
-                                    <StyledTableCell
-                                        align={'center'}
-                                        padding='none'
-                                    >
-                                        รหัสร้าน
-                                    </StyledTableCell>
-                                    <StyledTableCell
-                                        align={'center'}
-                                        padding='none'
-                                    >
-                                        เลขที่ใบเสร็จ
-                                    </StyledTableCell>
-                                    <StyledTableCell
-                                        align={'center'}
-                                        padding='none'
-                                    >
-                                        สถานะ
-                                    </StyledTableCell>
-                                    <StyledTableCell
-                                        align={'center'}
-                                        padding='none'
-                                    />
-                                </TableRow>
-                            </TableHead>
-                            <TableBody 
-                            className={classes.tbody}
+                        <Button onClick={handleResendMessage} color="primary" type="submit">
+                            <AutorenewIcon />
+                  
+                        </Button>
+                        {/* <Button onClick={() => {
+
+                            let item = JSON.parse(JSON.stringify(itemList))
+
+                            item = item.filter(el => el.status != 'ส่งข้อมูลสำเร็จ')
+                            if (item.length > 0)
+                                setItemList(item)
+                            else {
+                                setItemList([])
+                                setShowProp(false)
+                            }
+
+                        }} color="primary" type="submit">
+                            <DoneIcon />
+                            Clear Done
+                        </Button> */}
+                        <Button onClick={() => {
+                            setItemList([])
+                            setShowProp(false)
+                        }} color="primary" type="submit">
+                            <ClearAll />
+                       
+                        </Button>
+
+                        {/* <Button onClick={() => setShowProp(false)} color="primary" type="submit">
+                            <CloseIcon />
+                            Cancel
+                        </Button> */}
+                        {/* <ListItemText primary="โปรแกรมส่งข้อมูลยอดขายลงร้านสาขา" /> */}
+                    </HeaderListStyled>
+                    <PaperStyled elevation={0} >
+
+                        <TableContainerStyled className={classes.container} >
+                            <Table
+                                // style={{ width: "100%" }}
+                                stickyHeader
+                                aria-label="sticky table"
+                                fullWidth
+                                maxWidth="lg"
                             >
-                                {
-                                    itemList.map(transaction => {
-                                        return <StyledTableRow>
-                                            <TableCell
-                                                align={'center'}
-                                                padding='none'
-                                            >
-                                                {transaction.channel}
-                                            </TableCell>
-                                            <TableCell
-                                                align={'center'}
-                                                padding='none'
-                                            >
-                                                {transaction.store_id}
-                                            </TableCell>
-                                            <TableCell
-                                                // key={1}
-                                                align={'center'}
-                                                padding='none'
-                                            >
-                                                {transaction.receipt_no}
-                                            </TableCell>
-                                            <TableCell
-                                                // key={1}
-                                                align={'center'}
-                                                padding='none'
-                                            >
-                                                {transaction.status}
-                                            </TableCell>
-                                            <TableCell
-                                                align={'center'}
-                                                padding='none'
-                                            >
-                                                <IconButton color='primary'
-                                                onClick={() => { handleDelItem(transaction) }}
+                                <TableHead className={classes.thead}>
+                                    <TableRow>
+                                        <StyledTableCell
+                                            align={'center'}
+                                            padding='none'
+                                        >
+                                            แชนแนล
+                                    </StyledTableCell>
+                                        <StyledTableCell
+                                            align={'center'}
+                                            padding='none'
+                                        >
+                                            รหัสร้าน
+                                    </StyledTableCell>
+                                        <StyledTableCell
+                                            align={'center'}
+                                            padding='none'
+                                        >
+                                            เลขที่ใบเสร็จ
+                                    </StyledTableCell>
+                                        <StyledTableCell
+                                            align={'center'}
+                                            padding='none'
+                                        >
+                                            สถานะ
+                                    </StyledTableCell>
+                                        <StyledTableCell
+                                            align={'center'}
+                                            padding='none'
+                                        />
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody
+                                    className={classes.tbody}
+                                >
+                                    {
+                                        itemList.map(transaction => {
+                                            return <StyledTableRow>
+                                                <TableCell
+                                                    align={'center'}
+                                                    padding='none'
                                                 >
-                                                    <CancelIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </StyledTableRow>
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainerStyled>
-                </PaperStyled>
-            </DialogContent>
-        </Dialog>
-        <Loading
-            isOpen={isLoadingOpen}/>
+                                                    {transaction.channel}
+                                                </TableCell>
+                                                <TableCell
+                                                    align={'center'}
+                                                    padding='none'
+                                                >
+                                                    {transaction.store_id}
+                                                </TableCell>
+                                                <TableCell
+                                                    // key={1}
+                                                    align={'center'}
+                                                    padding='none'
+                                                >
+                                                    {transaction.receipt_no}
+                                                </TableCell>
+                                                <TableCell
+                                                    // key={1}
+                                                    align={'center'}
+                                                    padding='none'
+                                                >
+                                                    {transaction.status}
+                                                </TableCell>
+                                                <TableCell
+                                                    align={'center'}
+                                                    padding='none'
+                                                >
+                                                    <IconButton color='primary'
+                                                        onClick={() => { handleDelItem(transaction) }}
+                                                    >
+                                                        <CancelIcon />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </StyledTableRow>
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainerStyled>
+                    </PaperStyled>
+                </DialogContent>
+            </Dialog>
+            <Loading
+                isOpen={isLoadingOpen} />
         </>
     )
 }
