@@ -258,8 +258,9 @@ export default function MainUIRender(props) {
       };
 
       const apiResponse = await get_receipt_by_receiptno_api(apiRequest);
-      console.log(apiResponse)
+      // console.log(apiResponse)
       if (apiResponse.data != undefined) {
+
         if (apiResponse.data.result.apiresult.issuccess == false) {
           setShowReciepError({
             isShow: true,
@@ -269,9 +270,10 @@ export default function MainUIRender(props) {
           console.log("[" + apiResponse.data.result.apiresult.returncode + "] " +
             apiResponse.data.result.apiresult.message);
         } else {
+          console.log(apiResponse.data.result)
           setReceiptNo(receipt_no);
           setReceiptLine(apiResponse.data.result.payload.slip.receiptLines);
-          handleReceiptOpen();
+          setReceiptOpen(true)
         }
       }
     } catch (Exception) {
@@ -360,7 +362,9 @@ export default function MainUIRender(props) {
                 <IconButton edge="end" color='primary' onClick={() => { handleSearch(searchText) }} className={classes.menuButton}>
                   <SearchIcon />
                 </IconButton>
-                <IconButton edge="end" color='primary'  className={classes.menuButton}>
+                <IconButton edge="end" color='primary' onClick={()=>{
+                  props.setShowResendReceipt()
+                }} className={classes.menuButton}>
                   <CloudQueueIcon />
                 </IconButton>
               </ListItem>
@@ -446,16 +450,17 @@ export default function MainUIRender(props) {
             </TableHead>
             <TableBody>
               {
-                transactionList.map(transaction => {
-                  return <StyledTableRow>
+                transactionList.map((transaction,index) => {
+                  return <StyledTableRow key={'i'+index}>
                     <TableCell
                       align={'center'}
                       padding='none'
                     >
                       <Checkbox
-                        // checked={true}
-                        // onChange={handleChange}
+                        checked={props.isCheckedItem(transaction)}
+                        onChange={props.handleCheckedItem}
                         color="primary"
+                        value={JSON.stringify(transaction)}
                       />
                     </TableCell>
                     <TableCell
@@ -477,56 +482,56 @@ export default function MainUIRender(props) {
                       {transaction.channel}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'center'}
                       padding='none'
                     >
                       {transaction.reference_id}
                       </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'center'}
                       padding='none'
                     >
                       {transaction.receipt_no}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'center'}
                       padding='none'
                     >
                       {transaction.trans_type}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'center'}
                       padding='none'
                     >
                       {transaction.ref_receipt_no}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'right'}
                       padding='none'
                     >
                       {numberWithCommas(transaction.sub_total_amt)}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'right'}
                       padding='none'
                     >
                       {numberWithCommas(transaction.discount_amt)}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'right'}
                       padding='none'
                     >
                       {numberWithCommas(transaction.total_amt)}
                     </TableCell>
                     <TableCell
-                      key={1}
+                      // key={'i'+index}
                       align={'center'}
                       padding='none'
                     >

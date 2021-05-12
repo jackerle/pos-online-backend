@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
 import { useHistory, Redirect } from 'react-router-dom';
@@ -28,6 +28,7 @@ import Loading from '../../components/posonline/Loading'
 import MessageDialog from './../../components/Dialog/MessageDialog'
 import { get_store_api, get_transaction_by_store_api, get_store_info_api } from '../../utility/apihelper'
 import axios from 'axios';
+import ResendReceiptDialog from '../../components/Dialog/ResendReceiptDialog';
 
 //css
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +74,8 @@ export default function MainUIRender(props) {
   const { userInfo, logout } = props
   const classes = useStyles();
   const history = useHistory();
-
+  const [item_selected, set_item_selected] = useState([])
+  const [showNotItemSelected, setShowNotItemSelected] = useState(false)
   let user_info = {
     id: "",
     name: "",
@@ -132,6 +134,33 @@ export default function MainUIRender(props) {
     }
   };
 
+
+  const handleCheckedItem = (event) => {
+
+    let isChecked = event.target.checked
+    let transaction = JSON.parse(event.target.value)
+    transaction.status = "กำลังรอการดำเนินการ"
+    let item = JSON.parse(JSON.stringify(item_selected))
+
+    if (isChecked) {
+      item.push(transaction)
+      item.sort((a, b) => (a.store_id > b.store_id) ? 1 : (a.store_id === b.store_id) ? ((a.receipt_no > b.receipt_no) ? 1 : -1) : -1)
+      // console.log(item_selected)
+    } else {
+      item = item.filter(el => el.trans_id != transaction.trans_id)
+    }
+    console.log(item)
+    set_item_selected(item)
+
+  }
+
+  const handleShowResendReceipt = () => {
+    if (item_selected.length === 0)
+      setShowNotItemSelected(true)
+    else
+      setShowResendReceipt(true)
+  }
+
   const handleSignOn = (user) => {
     user_info = user;
     // history.push('/sale');
@@ -146,6 +175,7 @@ export default function MainUIRender(props) {
   };
 
   const [isLoadingOpen, setLoadingOpen] = React.useState(false);
+  const [showResendReceipt, setShowResendReceipt] = React.useState(false)
 
   const [storeList, setStoreList] = React.useState([]);
   const [storeListBk, setStoreListBk] = React.useState([]);
@@ -153,10 +183,17 @@ export default function MainUIRender(props) {
   const [transactionList, setTransactionList] = React.useState([]);
 
 
+
   const handleClickAddStore = () => {
     //
 
     setMenuSubIndex(2);
+  }
+
+  const isCheckedItem = (transaction)=>{
+
+    return item_selected.filter(el=>el.trans_id==transaction.trans_id).length > 0
+
   }
 
   async function initScreen() {
@@ -225,7 +262,7 @@ export default function MainUIRender(props) {
         // console.log(apiResponse)
         //set StoreInfo
         if (storeInfo.data != undefined) {
-          if(storeInfo.data.body.error){
+          if (storeInfo.data.body.error) {
             setShowStoreNotExist(true)
             setLoadingOpen(false)
             return
@@ -246,7 +283,7 @@ export default function MainUIRender(props) {
         //End Mock
       } catch (error) {
         reject('Error from getStoreInfo')
-      } 
+      }
 
     })
   }
@@ -322,6 +359,9 @@ export default function MainUIRender(props) {
                     store_info={storeSelected}
                     transaction_list={transactionList}
                     transaction_count={maxTransactionCount}
+                    setShowResendReceipt={handleShowResendReceipt}
+                    handleCheckedItem={handleCheckedItem}
+                    isCheckedItem={isCheckedItem}
                   />
                   :
                   <StoreAdd
@@ -335,6 +375,13 @@ export default function MainUIRender(props) {
       <Loading
         isOpen={isLoadingOpen}
       />
+      <ResendReceiptDialog
+        showProp={showResendReceipt}
+        setShowProp={setShowResendReceipt}
+        itemList={item_selected}
+        setItemList={set_item_selected}
+      />
+      <MessageDialog showProp={showNotItemSelected} setShowProp={setShowNotItemSelected} title={"ไม่พบใบเสร็จที่เลือก"} message={"ไม่พบรายการใบเสร็จที่เลือก กรุณาเลือกรายการใบเสร็จที่ต้องการทำรายการ"} />
       <MessageDialog showProp={showStoreNotExist} setShowProp={setShowStoreNotExist} title={"ไม่พบร้านค้า"} message={"ไม่พบร้านค้านี้ในระบบจากรหัสสาขาที่กรอกมา กรุณากรอกรหัสสาขาให้ถูกต้อง"} />
     </div>
   );
