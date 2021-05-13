@@ -21,6 +21,7 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { resend_by_receiptno_api } from "../../utility/apihelper";
 import DoneIcon from '@material-ui/icons/Done';
 import ClearAll from '@material-ui/icons/DeleteOutline';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 
 function PaperComponent(props) {
@@ -231,7 +232,7 @@ export default function ResendReceiptDialog({
                     id="draggable-dialog-title"
                     className={classes.styledHeader}
                     align={"center"}>
-                    Re-send receipt
+                    ส่งข้อมูลใบเสร็จไปร้านสาขา
                     <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowProp(false)}>
                     <CloseIcon />
                 </IconButton>
@@ -241,7 +242,7 @@ export default function ResendReceiptDialog({
                     align={"right"}>
 
                         <Button onClick={handleResendMessage} color="primary" type="submit">
-                            <AutorenewIcon />
+                            <CloudDownloadIcon />
                   
                         </Button>
                         {/* <Button onClick={() => {
@@ -260,13 +261,13 @@ export default function ResendReceiptDialog({
                             <DoneIcon />
                             Clear Done
                         </Button> */}
-                        <Button onClick={() => {
+                        {/* <Button onClick={() => {
                             setItemList([])
                             setShowProp(false)
                         }} color="primary" type="submit">
                             <ClearAll />
                        
-                        </Button>
+                        </Button> */}
 
                         {/* <Button onClick={() => setShowProp(false)} color="primary" type="submit">
                             <CloseIcon />

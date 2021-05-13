@@ -16,7 +16,7 @@ import { colors } from '@material-ui/core';
 const user_list = [
   {
     "username":"admin",
-    "password":"12345678"
+    "password":"1234"
   }
   
 ]
