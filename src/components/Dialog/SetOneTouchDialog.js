@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import CancelIcon from '@material-ui/icons/Cancel';
-import Loading from './../posonline/Loading'
+import Loading from './../posonline/LoadingWithProcess'
 import styled from 'styled-components';
 import { useHistory, Redirect } from 'react-router-dom';
 
@@ -156,7 +156,8 @@ export default function SetOneTouchDialog({
     const [isLoadingOpen, setLoadingOpen] = React.useState(false)
     const [storeIdInput, setStoreIdInput] = useState('')
     const [storeIdList, setStoreIdList] = useState([])
-
+    const [now_process , set_now_process] = useState(0)
+    const [max_process, set_max_process] = useState(0)
     const [dialogMessage, setDialogMessage] = useState({
         isShow : false,
         title : '',
@@ -218,6 +219,8 @@ export default function SetOneTouchDialog({
         try {
             setLoadingOpen(true)
 
+
+
             if (storeIdList.length === 0) {
                 // alert('ไม่มีรหัสสาขาที่ต้องการจะ set onetouch')
                 setDialogMessage({
@@ -229,6 +232,8 @@ export default function SetOneTouchDialog({
             }
 
             let x = JSON.parse(JSON.stringify(storeIdList))
+
+            set_max_process(x.length)
 
             for (let i = 0; i < x.length; i++) {
                 // if (x[i].status != 'ส่งข้อมูลสำเร็จ')
@@ -266,6 +271,7 @@ export default function SetOneTouchDialog({
                         x[i].storeName = apiResponse.data.result.payload.store_name
                     }
                 }
+                set_now_process(i)
             }
             setStoreIdList(x)
 
@@ -419,6 +425,8 @@ export default function SetOneTouchDialog({
             </Dialog>
             <MessageDialog showProp={dialogMessage.isShow} setShowProp={(isShow)=>setDialogMessage(isShow)} title={dialogMessage.title} message={dialogMessage.message}/>
             <Loading
+                now_process = {now_process}
+                max_process = {max_process}
                 isOpen={isLoadingOpen} />
         </>
     )
