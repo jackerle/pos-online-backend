@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
 import { useHistory, Redirect } from 'react-router-dom';
@@ -10,7 +10,7 @@ import {
   Card, Typography, Button, Box, ListItemAvatar, Avatar, IconButton, Badge,
   ListItemSecondaryAction, ButtonGroup, Container, Dialog, DialogTitle, DialogContent, DialogContentText,
   TextField, DialogActions, CardActionArea, CardMedia, CardContent, AppBar, Toolbar, Chip,
-  InputAdornment, TextareaAutosize, InputBase,
+  InputAdornment, TextareaAutosize, InputBase, Menu, MenuItem
 } from '@material-ui/core'
 import SignOnIcon from '@material-ui/icons/PersonAdd';
 import MenuIcon from '@material-ui/icons/FormatListBulleted';
@@ -29,6 +29,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MainMenu from '../real/MainMenu'
 import SignOn from '../real/SignOn'
 import AlertSignOff from '../real/AlertSignOff'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ListIcon from '@material-ui/icons/List';
 
 //css
 const useStyles = makeStyles((theme) => ({
@@ -71,12 +73,12 @@ const InputBaseStyled = styled(InputBase)`
 
 export default function MainUIRender(props) {
 
-  const { isLogin, handleClickLoginOpen, userInfo, logout } = props
+  const { isLogin, handleClickLoginOpen, userInfo, logout,setShowSetOnetouch } = props
 
   const classes = useStyles();
   const history = useHistory();
-  const [confirmLogout,setConfirmLogout] = useState(false)
-
+  const [confirmLogout, setConfirmLogout] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(false)
 
 
   return (
@@ -108,6 +110,65 @@ export default function MainUIRender(props) {
                   </Badge>
                 </IconButton>
 
+                <IconButton edge="end" color="inherit" className={classes.menuButton}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                >
+                  <Badge badgeContent={0}
+                    variant="dot"
+                    color='error'
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}>
+                    <ArrowDropDownIcon />
+                  </Badge>
+                </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
+                >
+                  <MenuItem onClick={() => {
+                    setShowSetOnetouch(true)
+                    setAnchorEl(null)
+                  }}>
+                    <IconButton edge="end" color="inherit" className={classes.menuButton} >
+                      <Badge badgeContent={0}
+                        variant="dot"
+                        color='error'
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}>
+                        <ListIcon />
+                      </Badge>
+                    </IconButton>
+                   Set One-touch
+                    </MenuItem>
+
+
+                  <MenuItem onClick={() => {
+                    setConfirmLogout(true)
+                    setAnchorEl(null)
+                  }}>
+                    <IconButton edge="end" color="inherit" className={classes.menuButton} >
+                      <Badge badgeContent={0}
+                        variant="dot"
+                        color='error'
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}>
+                        <ExitToAppIcon />
+
+                      </Badge>
+                    </IconButton>
+                Logout
+                  </MenuItem>
+                </Menu>
+                {/* 
                 <IconButton edge="end" color="inherit" className={classes.menuButton} onClick={()=>setConfirmLogout(true)}>
                   <Badge badgeContent={0}
                     variant="dot"
@@ -118,21 +179,21 @@ export default function MainUIRender(props) {
                     }}>
                     <ExitToAppIcon />
                   </Badge>
-                </IconButton>
-                
+                </IconButton> */}
+
                 {/* Confirm Logout */}
                 <Dialog
                   open={confirmLogout}
-                  onClose={()=>setConfirmLogout(false)}
+                  onClose={() => setConfirmLogout(false)}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
                   <DialogTitle id="alert-dialog-title">{"ต้องการออกจากระบบหรือไม่"}</DialogTitle>
                   <DialogActions>
-                    <Button onClick={()=>setConfirmLogout(false)} color="primary">
+                    <Button onClick={() => setConfirmLogout(false)} color="primary">
                       ไม่ใช่
                     </Button>
-                    <Button onClick={()=>{
+                    <Button onClick={() => {
                       logout()
                       setConfirmLogout(false)
                     }} color="primary" autoFocus>

@@ -29,6 +29,7 @@ import MessageDialog from './../../components/Dialog/MessageDialog'
 import { get_store_api, get_transaction_by_store_api, get_store_info_api } from '../../utility/apihelper'
 import axios from 'axios';
 import ResendReceiptDialog from '../../components/Dialog/ResendReceiptDialog';
+import SetOneTouchDialog from '../../components/Dialog/SetOneTouchDialog';
 
 //css
 const useStyles = makeStyles((theme) => ({
@@ -76,6 +77,7 @@ export default function MainUIRender(props) {
   const history = useHistory();
   const [item_selected, set_item_selected] = useState([])
   const [showNotItemSelected, setShowNotItemSelected] = useState(false)
+  const [showSetOnetouch , setShowSetOnetouch] = useState(false)
   let user_info = {
     id: "",
     name: "",
@@ -326,7 +328,7 @@ export default function MainUIRender(props) {
         store_name={"ร้าน 7-Eleven " + store_info.id + " " + store_info.name}
         user={user_info}
         after_signon_callback={handleSignOn}
-
+        setShowSetOnetouch={setShowSetOnetouch}
         // Added
         isLogin={true} userInfo={userInfo} logout={logout}
       >
@@ -381,6 +383,10 @@ export default function MainUIRender(props) {
         setShowProp={setShowResendReceipt}
         itemList={item_selected}
         setItemList={set_item_selected}
+      />
+      <SetOneTouchDialog 
+        showProp={showSetOnetouch}
+        setShowProp={setShowSetOnetouch}
       />
       <MessageDialog showProp={showNotItemSelected} setShowProp={setShowNotItemSelected} title={"ไม่พบใบเสร็จที่เลือก"} message={"ไม่พบรายการใบเสร็จที่เลือก กรุณาเลือกรายการใบเสร็จที่ต้องการทำรายการ"} />
       <MessageDialog showProp={showStoreNotExist} setShowProp={setShowStoreNotExist} title={"ไม่พบร้านค้า"} message={"ไม่พบร้านค้านี้ในระบบจากรหัสสาขาที่กรอกมา กรุณากรอกรหัสสาขาให้ถูกต้อง"} />
