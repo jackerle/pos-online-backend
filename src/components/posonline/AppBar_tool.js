@@ -145,7 +145,7 @@ export default function MainUIRender(props) {
                         <ListIcon />
                       </Badge>
                     </IconButton>
-                   Set One-touch
+                  โปรแกรมเซตสินค้า Onetouch
                     </MenuItem>
 
 
@@ -165,7 +165,7 @@ export default function MainUIRender(props) {
 
                       </Badge>
                     </IconButton>
-                Logout
+                ออกจากระบบ
                   </MenuItem>
                 </Menu>
                 {/* 

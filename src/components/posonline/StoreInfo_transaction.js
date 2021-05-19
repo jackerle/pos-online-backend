@@ -402,7 +402,7 @@ export default function MainUIRender(props) {
                   align={'center'}
                   padding='none'
                 >
-                  ReferenceID
+                  เลขออเดอร์
                 </StyledTableCell>
                 <StyledTableCell
                   align={'center'}
@@ -420,7 +420,7 @@ export default function MainUIRender(props) {
                   align={'center'}
                   padding='none'
                 >
-                  ใบเสร็จอ้างอิง
+                  ใบเสร็จที่ถูกยกเลิก
                 </StyledTableCell>
                 <StyledTableCell
                   align={'center'}
@@ -444,7 +444,7 @@ export default function MainUIRender(props) {
                   align={'center'}
                   padding='none'
                 >
-                  Operation
+                  ใบเสร็จ
                 </StyledTableCell>
               </TableRow>
             </TableHead>  

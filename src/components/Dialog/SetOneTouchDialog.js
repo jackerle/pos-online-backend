@@ -24,6 +24,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CloudQueueIcon from '@material-ui/icons/CloudQueue';
 import MessageDialog from './MessageDialog';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 function PaperComponent(props) {
     return (
@@ -288,6 +289,26 @@ export default function SetOneTouchDialog({
 
     }
 
+    async function handle_reset_onetouch() {
+
+        try {
+            setLoadingOpen(true)
+
+            setStoreIdList([])
+
+
+
+        } catch (err) {
+            console.log(err)
+            alert(err)
+
+        }
+        finally {
+            setLoadingOpen(false)
+        }
+
+    }
+
 
     return (
         <>
@@ -306,7 +327,7 @@ export default function SetOneTouchDialog({
                     id="draggable-dialog-title"
                     className={classes.styledHeader}
                     align={"center"}>
-                    Set One-Touch Service
+                    โปรแกรมเซตสินค้า Onetouch
                     <IconButton aria-label="close" className={classes.closeButton} onClick={() => setShowProp(false)}>
                         <CloseIcon />
                     </IconButton>
@@ -337,6 +358,11 @@ export default function SetOneTouchDialog({
                                     onClick={handle_request_set_onetouch}
                                 >
                                     <CloudQueueIcon />
+                                </IconButton>
+                                <IconButton edge="end" color='primary' className={classes.menuButton}
+                                    onClick={handle_reset_onetouch}
+                                >
+                                    <HighlightOffIcon />
                                 </IconButton>
                             </ListItem>
                         </List>
