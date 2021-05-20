@@ -82,10 +82,11 @@ const useStyles = makeStyles((theme) => ({
         top: theme.spacing(0),
         color: theme.palette.grey[500],
     },
+
     tbody: {
         display: "block",
-        maxHeight: "400px",
-        // overflowY: "auto"
+        height: "380px",
+        overflowY: "auto"
     },
     thead: {
         display: "table",
@@ -198,10 +199,7 @@ export default function SetOneTouchDialog({
                 delete _store_list[index]
             }
             if (ele.length < 5) {
-                _store_list[index] = ele.length === 4 ? "0" + ele :
-                    ele.length === 3 ? "00" + ele :
-                        ele.length === 2 ? "000" + ele :
-                            "0000" + ele
+                _store_list[index] = ele.padStart(5,0)
             }
             store_list.push({
                 "storeId": _store_list[index],
@@ -333,7 +331,7 @@ export default function SetOneTouchDialog({
                     </IconButton>
                 </DialogTitle>
 
-                <DialogContent style={{ marginBottom: '2rem',overflow:"hidden" }} className={classes.tableBody}>
+                <DialogContent style={{ marginBottom: '0rem',overflow:"hidden",paddingBottom:"4rem" }} className={classes.tableBody}>
                     <HeaderListStyled
                         align={"right"}>
                         <List >
