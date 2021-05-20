@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
     tbody: {
         display: "block",
-        height: "380px",
+        height: "350px",
         overflowY: "auto"
     },
     thead: {
