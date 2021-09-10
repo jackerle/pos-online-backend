@@ -3,7 +3,7 @@ import axios from 'axios';
 
 //constant
 // const prefix_api = "https://55s5847gd0.execute-api.ap-southeast-1.amazonaws.com/dev";
-const prefix_api = 'https://xcg4gqwjy7.execute-api.ap-southeast-1.amazonaws.com/prd';
+const prefix_api = 'https://pycjh7udr7.execute-api.ap-southeast-1.amazonaws.com/prd';
 // const prefix_api2 = "https://g5ull09frb.execute-api.ap-southeast-1.amazonaws.com/dev";
 const prefix_api2 = 'https://ejkjg9twtk.execute-api.ap-southeast-1.amazonaws.com/prd';
 

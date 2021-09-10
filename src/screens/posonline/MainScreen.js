@@ -124,7 +124,9 @@ export default function MainUIRender(props) {
           let trn_count = apiResponse.data.result.payload.totalrecords;
 
           setMaxTransactionCount(trn_count)
-          setTransactionList(trn_list);
+          setTransactionList(trn_list.sort((next,prev)=>{
+            return new Date(next.system_date).getTime() - new Date(prev.system_date).getTime() 
+          }));
         }
       }
     } catch (Exception) {
