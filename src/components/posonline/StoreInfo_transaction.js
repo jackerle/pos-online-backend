@@ -44,7 +44,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Receipt from '../../components/posonline/Receipt'
-import { get_receipt_by_receiptno_api, get_transaction_by_store_api } from '../../utility/apihelper'
+import { get_receipt_by_receiptno_api, get_transaction_by_store_api , get_transaction_count } from '../../utility/apihelper'
 import Checkbox from '@material-ui/core/Checkbox';
 import MessageDialog from '../Dialog/MessageDialog';
 import CloudQueueIcon from '@material-ui/icons/CloudQueue';
@@ -226,6 +226,8 @@ export default function MainUIRender(props) {
       };
 
       const apiResponse = await get_transaction_by_store_api(apiRequest);
+      const apiResponseCount  = await get_transaction_count(apiRequest)
+
       console.log(apiResponse)
       if (apiResponse.data != undefined) {
         if (apiResponse.data.result.apiresult.issuccess == false) {
@@ -233,7 +235,7 @@ export default function MainUIRender(props) {
             apiResponse.data.result.apiresult.message);
         } else {
           let trn_list = apiResponse.data.result.payload.transactions;
-          let trn_count = apiResponse.data.result.payload.totalrecords;
+          let trn_count = apiResponseCount.data.result.payload.totalrecords;
 
           setMaxTransactionCount(trn_count)
           setTransactionList(trn_list);
@@ -302,6 +304,7 @@ export default function MainUIRender(props) {
       };
 
       const apiResponse = await get_transaction_by_store_api(apiRequest);
+      const apiResponseCount  = await get_transaction_count(apiRequest)
 
       if (apiResponse.data != undefined) {
         if (apiResponse.data.result.apiresult.issuccess == false) {
@@ -309,7 +312,7 @@ export default function MainUIRender(props) {
             apiResponse.data.result.apiresult.message);
         } else {
           let trn_list = apiResponse.data.result.payload.transactions;
-          let trn_count = apiResponse.data.result.payload.totalrecords;
+          let trn_count = apiResponseCount.data.result.payload.totalrecords;
 
           setMaxTransactionCount(trn_count)
           setTransactionList(trn_list);

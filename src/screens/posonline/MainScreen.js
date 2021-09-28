@@ -26,7 +26,7 @@ import StoreAdd from '../../components/posonline/StoreInfo_add'
 import store_list_mock from '../../static/data/posonline/store_data.json'
 import Loading from '../../components/posonline/Loading'
 import MessageDialog from './../../components/Dialog/MessageDialog'
-import { get_store_api, get_transaction_by_store_api, get_store_info_api } from '../../utility/apihelper'
+import { get_store_api, get_transaction_by_store_api, get_store_info_api , get_transaction_count } from '../../utility/apihelper'
 import axios from 'axios';
 import ResendReceiptDialog from '../../components/Dialog/ResendReceiptDialog';
 import SetOneTouchDialog from '../../components/Dialog/SetOneTouchDialog';
@@ -113,15 +113,16 @@ export default function MainUIRender(props) {
 
       // console.log(apiRequest)
       const apiResponse = await get_transaction_by_store_api(apiRequest);
+      const apiResponseCount  = await get_transaction_count(apiRequest)
 
-      console.log(apiResponse)
-      if (apiResponse.data != undefined) {
+      // console.log(apiResponse)
+      if (apiResponse.data != undefined && apiResponseCount.data != undefined) {
         if (apiResponse.data.result.apiresult.issuccess == false) {
           alert("[" + apiResponse.data.result.apiresult.returncode + "] " +
             apiResponse.data.result.apiresult.message);
         } else {
           let trn_list = apiResponse.data.result.payload.transactions;
-          let trn_count = apiResponse.data.result.payload.totalrecords;
+          let trn_count = apiResponseCount.data.result.payload.totalrecords;
 
           setMaxTransactionCount(trn_count)
           setTransactionList(trn_list);
